@@ -14,14 +14,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { User } from './modules/user/entity/user';
 import { AuthService } from './modules/auth/service/auth.service';
 import { GoogleAuthProvider } from './modules/auth/service/google-auth-provider.service';
-import { UserService } from 'src/modules/user/servise/user.service';
-import { WebSocketGateway } from '@nestjs/websockets';
 
 const databaseUrl: string = process.env.API_RANDOM_ORDER_DATABASE_URL;
 const connectionOptions = databaseUrl ? PostgressConnectionStringParser.parse(databaseUrl) : null;
 
-@WebSocketGateway(80, { namespace: 'events' })
-@WebSocketGateway(81, { transports: ['websocket'] })
 @Module({
   imports: [
     WebsoketModule,

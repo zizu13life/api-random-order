@@ -1,3 +1,4 @@
+import { API_INTERNAL_PORT } from './../../../config/conts';
 import { UserService } from './../../../user/servise/user.service';
 import {
   ConnectedSocket,
@@ -17,13 +18,12 @@ import { verify } from 'jsonwebtoken';
 import { from, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Server, Socket } from 'socket.io';
-import { JWT_SECRET_KEY } from 'src/modules/config/conts';
+import { API_HOST, JWT_SECRET_KEY } from 'src/modules/config/conts';
 import { WebsocketEvent, WebsocketEventType } from '../dto/WebsocketEvent';
 import { AuthJWT } from 'src/modules/auth/dto/auth-models';
 import { User } from 'src/modules/user/entity/user';
 
 @WebSocketGateway({ transports: ['websocket', 'polling'], } as SocketIO.ServerOptions)
-@WebSocketGateway()
 export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer()
