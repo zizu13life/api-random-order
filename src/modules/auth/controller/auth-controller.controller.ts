@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { GoogleAuthOptions } from 'google-auth-library';
 import { url } from 'inspector';
-import { WEB_HOST } from 'src/modules/config/conts';
+import { API_HOST, WEB_HOST } from 'src/modules/config/conts';
 import { GoogleAuthResponse } from '../dto/auth-models';
 import { GoogleAuthProvider } from '../service/google-auth-provider.service';
 
@@ -40,7 +40,7 @@ export class AuthController {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
-            domain: new URL(WEB_HOST).hostname,
+            domain: new URL(API_HOST).hostname,
         });
     }
 
