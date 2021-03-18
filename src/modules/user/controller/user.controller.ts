@@ -6,7 +6,7 @@ import { UserService } from 'src/modules/user/servise/user.service';
 import { UserPermissions } from '../entity/user';
 import { CheckPermissions, PERMISSIONS_KEY, Principal } from '../../config/decorators/user-decorator';
 
-@Controller('user')
+@Controller('users')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class UserController {
 
@@ -18,13 +18,18 @@ export class UserController {
         return this.userService.findOne(principal);
     }
 
-    @Get('/account')
+    @Get('/me/account')
     async getAccountWithExpiration(@Req() req, @Principal() principal: number) {
         return {
             user: await this.userService.findOne(principal),
             exp: req.user.exp,
             permissions: (req.user as AuthJWT).permissions,
         };
+    }
+
+    @Get('/active')
+    async getAllActive(@Req() req, @Principal() principal: number) {
+        return this.userService.findAllActive();
     }
 
     @Get('/')

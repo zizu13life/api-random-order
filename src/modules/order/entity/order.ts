@@ -7,6 +7,9 @@ export class Order {
     id?: number;
 
     @Column()
+    name: string;
+
+    @Column({ nullable: true })
     description: string;
 
     @ManyToOne(type => User)
@@ -19,9 +22,12 @@ export class Order {
     @Column({ default: 1 })
     priority: number;
 
-    @Column({ type: 'timestamp' })
+    @Column({ type: 'timestamp', nullable: true })
     linkedAt: Date;
 
-    @Column({ type: 'timestamp' })
+    @Column({ type: 'timestamp', nullable: true })
     doneAt: Date;
+
+    @Column({ type: 'timestamp' })
+    createdAt: Date;
 }

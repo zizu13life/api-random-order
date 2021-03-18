@@ -52,7 +52,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     if (decoded == null){
       client.disconnect(true);
     }else{
-      this.sendUserConectEvent(decoded.userId).then();
+      this.sendUserConnectEvent(decoded.userId).then();
     }
   }
 
@@ -71,18 +71,20 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
   handleDisconnect(client: SocketIO.Socket) {
     const auth = this.getParsedToken(client);
     if (auth) {
-      this.sendUserDisconectEvent(auth.userId).then();
+      this.sendUserDisconnectEvent(auth.userId).then();
     }
   }
 
-  async sendUserConectEvent(userId: number) {
+  async sendUserConnectEvent(userId: number) {
+    this.userService.activeUsers.add(userId);
     this.emit({
       type: WebsocketEventType.USER_CONNECTED,
       data: await this.userService.findOne(userId),
     } as WebsocketEvent<User>);
   }
 
-  async sendUserDisconectEvent(userId: number) {
+  async sendUserDisconnectEvent(userId: number) {
+    this.userService.activeUsers.delete(userId);
     this.emit({
       type: WebsocketEventType.USER_DISCONNECTED,
       data: await this.userService.findOne(userId),

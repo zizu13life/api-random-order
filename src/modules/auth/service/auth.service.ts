@@ -27,7 +27,7 @@ export class AuthService {
                 provider
             }
 
-            const jwt: string = sign(payload, JWT_SECRET_KEY, { expiresIn: 3600 * 12 });
+            const jwt: string = sign(payload, JWT_SECRET_KEY, { expiresIn: '1d' });
             return jwt;
         }
         catch (err) {

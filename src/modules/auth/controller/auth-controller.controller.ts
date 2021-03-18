@@ -36,7 +36,8 @@ export class AuthController {
         const token = await this.googleAuthProvider.login(body);
 
         response.cookie('Authorization', token, {
-            maxAge: 900000,
+            maxAge: 1000*3600*24*2,
+            expires: new Date(new Date().getTime() + 1000*3600*24*2),
             httpOnly: true,
             secure: true,
             sameSite: 'none',

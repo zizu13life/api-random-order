@@ -6,13 +6,17 @@ import { User } from '../entity/user';
 
 @Injectable()
 export class UserService {
-  activeUsers: User[] = [];
+  activeUsers: Set<number> = new Set<number>();
 
   constructor(@InjectRepository(User) private usersRepository: Repository<User>,
   ) { }
 
   findAll(): Promise<User[]> {
     return this.usersRepository.find();
+  }
+
+  findAllActive(): Promise<User[]> {
+    return this.usersRepository.findByIds(Array.from(this.activeUsers));
   }
 
   findOne(id: number): Promise<User> {
