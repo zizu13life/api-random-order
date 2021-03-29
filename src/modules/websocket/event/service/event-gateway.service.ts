@@ -22,8 +22,11 @@ import { API_HOST, JWT_SECRET_KEY } from 'src/modules/config/conts';
 import { WebsocketEvent, WebsocketEventType } from '../dto/WebsocketEvent';
 import { AuthJWT } from 'src/modules/auth/dto/auth-models';
 import { User } from 'src/modules/user/entity/user';
+import { Order } from 'src/modules/order/entity/order';
+import { Injectable } from '@nestjs/common';
 
 @WebSocketGateway({ transports: ['websocket', 'polling'], } as SocketIO.ServerOptions)
+@Injectable()
 export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer()
@@ -73,6 +76,20 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     if (auth) {
       this.sendUserDisconnectEvent(auth.userId).then();
     }
+  }
+
+  sendUserUpdateOrderListEvent() {
+    this.emit({
+      type: WebsocketEventType.USER_UPDATE_ORDER_LIST,
+      data: null,
+    } as WebsocketEvent<any>);
+  }
+
+  sendUserTakeOrderEvent(order: Order) {
+    this.emit({
+      type: WebsocketEventType.USER_TAKE_ORDER,
+      data: order,
+    } as WebsocketEvent<Order>);
   }
 
   async sendUserConnectEvent(userId: number) {

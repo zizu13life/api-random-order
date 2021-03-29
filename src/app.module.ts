@@ -41,6 +41,7 @@ const connectionOptions = databaseUrl ? PostgressConnectionStringParser.parse(da
       ssl: { rejectUnauthorized: false },
       autoLoadEntities: true,
       synchronize: true,
+      logging: true,
     }),
     TypeOrmModule.forFeature([User]),
   ],

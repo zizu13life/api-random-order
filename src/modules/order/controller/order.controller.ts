@@ -8,35 +8,35 @@ import { JwtAuthGuard, PermissionsGuard } from 'src/modules/auth/service/jwt-aut
 @Controller('orders')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class OrderController {
-    constructor(private orderService: OrderService){
+    constructor(private orderService: OrderService) {
 
     }
 
     @Get('/unlinked')
-    async getUnlinked(@Query('page') page = 0){
+    async getUnlinked(@Query('page') page = 0) {
         return this.orderService.getUnlinked(page);
     }
 
     @Get('/linked')
-    async getLinked(@Query('date') date = new Date()){
+    async getLinked(@Query('date') date = new Date(), @Query('flterDate') flterDate?: Date) {
         date = new Date(date);
-        return this.orderService.getLinked(date);
+        return this.orderService.getLinked(date, flterDate ? new Date(flterDate) : null);
     }
 
     @Post('/link/random/to/me')
-    async linkMe(@Principal() principal: number){
+    async linkMe(@Principal() principal: number) {
         return this.orderService.linkToUserRandomTask(principal);
     }
 
     @Post()
     @CheckPermissions(UserPermissions.ADMIN)
-    async create(@Body() order: Order){
+    async create(@Body() order: Order) {
         return this.orderService.create(order);
     }
 
     @Delete('/:id')
     @CheckPermissions(UserPermissions.ADMIN)
-    async remove(@Param('id') id: number){
+    async remove(@Param('id') id: number) {
         return this.orderService.remove(id);
     }
 }

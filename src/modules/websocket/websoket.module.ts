@@ -10,5 +10,8 @@ import { EventsGateway } from './event/service/event-gateway.service';
     providers: [
         EventsGateway,
     ],
+    exports: [
+        EventsGateway,
+    ]
 })
 export class WebsoketModule { }
