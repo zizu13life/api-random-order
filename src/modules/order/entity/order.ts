@@ -28,6 +28,16 @@ export class Order {
     @Column({ type: 'timestamp', nullable: true })
     doneAt: Date;
 
+    @Column({ type: 'timestamp', nullable: true })
+    rejectedAt: Date;
+
+    @ManyToOne(type => User)
+    @JoinColumn()
+    rejectedBy: User;
+
+    @Column({ nullable: true })
+    rejectedById: number;
+
     @Column({ type: 'timestamp' })
     createdAt: Date;
 }

@@ -62,13 +62,27 @@ export class OrderService {
     return forkJoin(orders).pipe(tap(this.eventsGateway.sendUserUpdateOrderListEvent.bind(this.eventsGateway)));
   }
 
-  async remove(id: number) {
+  async remove(id: number, userId: number) {
     const order = await this.orderRepository.findOne(id);
-    if (order == null || order.linkedAt) {
+    if (order == null || order.rejectedAt) {
       throw new ForbiddenException();
     }
-    return from(this.orderRepository.delete(id))
-      .pipe(tap(this.eventsGateway.sendUserUpdateOrderListEvent.bind(this.eventsGateway)));
+
+    if (order.linkedAt) {
+      const copy = JSON.parse(JSON.stringify(order)) as Order;
+      copy.id = null;
+      copy.linkedAt = null;
+      userId = null;
+
+      order.rejectedById = userId;
+      order.rejectedAt = new Date();
+      return from(this.orderRepository.save([order, copy]))
+        .pipe(tap(this.eventsGateway.sendUserUpdateOrderListEvent.bind(this.eventsGateway)));
+    } else {
+      return from(this.orderRepository.delete(id))
+        .pipe(tap(this.eventsGateway.sendUserUpdateOrderListEvent.bind(this.eventsGateway)));
+    }
+
   }
 
   async linkToUserRandomTask(userId: number) {

@@ -36,7 +36,7 @@ export class OrderController {
 
     @Delete('/:id')
     @CheckPermissions(UserPermissions.ADMIN)
-    async remove(@Param('id') id: number) {
-        return this.orderService.remove(id);
+    async remove(@Param('id') id: number, @Principal() principal: number) {
+        return this.orderService.remove(id, principal);
     }
 }
