@@ -36,11 +36,11 @@ export class OrderService {
       .select()
       .leftJoinAndSelect('order.user', 'user')
       .addOrderBy('order.linkedAt', 'DESC')
-      .andWhere("order.linkedAt < :date", { date: date })
+      .andWhere("order.linkedAt < :date", { date: date.toUTCString() })
       .limit(PAGE_SIZE);
 
     if (filterDate) {
-      q.andWhere('DATE(order.linkedAt) = DATE(:filterDate)', { filterDate })
+      q.andWhere('DATE(order.linkedAt) = DATE(:filterDate)', { filterDate: filterDate.toUTCString() })
     }
 
     return q.getMany();
