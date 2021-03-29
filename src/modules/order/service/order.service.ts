@@ -36,7 +36,7 @@ export class OrderService {
       .select()
       .leftJoinAndSelect('order.user', 'user')
       .addOrderBy('order.linkedAt', 'DESC')
-      .andWhere("order.linkedAt < :date", { date: date.toDateString() })
+      .andWhere("order.linkedAt < :date", { date: date })
       .limit(PAGE_SIZE);
 
     if (filterDate) {
